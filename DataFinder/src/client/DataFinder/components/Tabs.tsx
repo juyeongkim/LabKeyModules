@@ -28,7 +28,7 @@ interface DataFinderTabsProps {
     renderWebpart: (tabName: string) => void;
     filterClick: (dim: string, filter: Filter) => void;
     selectedStudies: List<string> | undefined;
-    sampleTypeCheckbox: JSX.Element
+    sampleTypeCheckbox: () => JSX.Element
 }
 
 const Tabs: React.FC<TabProps> = ({ tabs, defaultActive, tabFunction }) => {
@@ -61,7 +61,7 @@ const Tabs: React.FC<TabProps> = ({ tabs, defaultActive, tabFunction }) => {
     )
 }
 
-export const DataFinderTabs: React.FC<DataFinderTabsProps> = (
+export const DataFinderTabs = React.memo<DataFinderTabsProps>((
     {
         cubeData, 
         showSampleType, 
@@ -83,7 +83,7 @@ export const DataFinderTabs: React.FC<DataFinderTabsProps> = (
                 data={cubeData.Data} 
                 showSampleType={showSampleType} 
                 filterCategories={filterCategories}
-                sampleTypeCheckbox={sampleTypeCheckbox} />,
+                sampleTypeCheckbox={sampleTypeCheckbox()} />,
             id: "data",
             tag: "find-data",
             text: "Available Assay Data",
@@ -116,7 +116,7 @@ export const DataFinderTabs: React.FC<DataFinderTabsProps> = (
     return(
         <Tabs tabs={tabs} defaultActive={"study"} tabFunction={renderWebpart} />
     )
-}
+})
 
 
 

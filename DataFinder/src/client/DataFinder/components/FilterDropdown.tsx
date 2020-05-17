@@ -89,7 +89,7 @@ export const FilterDropdown_old: React.FC<FilterDropdownProps> = ({ dimension, l
 
 
 
-export const FilterDropdownContent: React.FC<FilterDropdownProps> = 
+export const FilterDropdownContent = React.memo<FilterDropdownProps>(
 ({ 
         dimension, 
         level, 
@@ -128,7 +128,7 @@ export const FilterDropdownContent: React.FC<FilterDropdownProps> =
                 })}
             </div>
     )
-}
+})
 
 export const ContentDropdown: React.FC<ContentDropdownProps> = ({ id, label, content, customMenuClass, children }) => {
     return (

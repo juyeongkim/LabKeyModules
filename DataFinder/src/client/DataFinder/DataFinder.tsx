@@ -1,8 +1,14 @@
 import "./DataFinder.scss";
-import React from 'react';
+
+// TODO: You can import hooks directly so you don't need the React. prefix throughout your code.
+import React, {useState, useEffect, useCallback} from 'react';
 // import {olap} from '../olap/olap'
+
+/* TODO: No real functional difference between these two styles of import but for consistency you might choose to go with
+    one format. At LK we go with the top one so you don't have to add the namespace prefix throughout your code. */
 import { CubeData, Filter, SelectedFilters, TotalCounts, GroupInfo, BannerInfo } from '../typings/CubeData';
 import * as CubeHelpers from './helpers/CubeHelpers';
+
 import * as ParticipantGroupHelpers from './helpers/ParticipantGroup';
 import * as TabContent from './components/TabContent';
 import { toggleFilter, setAndOr } from './helpers/SelectedFilters';
@@ -20,12 +26,22 @@ import { Banner } from "./components/Banner";
 import { AssayTimepointViewerContainer } from "./components/AssayTimepointViewer";
 import localStorage from './helpers/localStorage'
 import { CubeMdx } from "../typings/Cube";
+import whyDidYouRender from "@welldone-software/why-did-you-render";
 interface DataFinderControllerProps {
     mdx:  CubeMdx,
     studyInfo: SelectRowsResponse
 }
 
-const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyInfo}) => {
+/* TODO: Useful tool for detecting unnecessary renders. Assigned to DataFinderController below DataFinderController.
+    https://github.com/welldone-software/why-did-you-render#readme */
+whyDidYouRender(React, {
+    onlyLogs: true,
+    titleColor: "green",
+    diffNameColor: "darkturquoise"
+});
+
+// TODO: I would recommend just going with all React.memo classes instead of regular React.FC. Gives React opportunity optimize renders
+const DataFinderController = React.memo<DataFinderControllerProps>(({mdx, studyInfo}) => {
     // Constants -------------------------------------
     const cd = new CubeData({})
     const sf = new SelectedFilters(JSON.parse(localStorage.getItem("dataFinderSelectedFilters")));
@@ -40,25 +56,29 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
     // State ---------------------------------------------
     // ----- Data (updated by API calls) -----
     // Set on page load only
-    const [filterCategories, setFilterCategories] = React.useState(null)
-    const [studyDict, setStudyDict] = React.useState(null); // this should only be loaded once
+    const [filterCategories, setFilterCategories] = useState(null)
+    const [studyDict, setStudyDict] = useState(null); // this should only be loaded once
     // Updated when a group is saved: 
-    const [availableGroups, setAvailableGroups] = React.useState<GroupInfo[]>([])
+    const [availableGroups, setAvailableGroups] = useState<GroupInfo[]>([])
     // Updated on "apply": 
-    const [cubeData, setCubeData] = React.useState<CubeData>(cd)
-    const [studyParticipantCounts, setStudyParticipantCounts] = React.useState<List<StudyParticipantCount>>(List())
-    const [totalAppliedCounts, setTotalAppliedCounts] = React.useState<TotalCounts>({ study: 0, participant: 0 })
-    const [filteredPids, setFilteredPids] = React.useState<string[]>(null)
+    const [cubeData, setCubeData] = useState<CubeData>(cd)
+
+    /* TODO: If you are continuing to have performance issues due to many renders, you might consider combining some of your state.
+        Especially the state that is usually updated together. Just remember to do immutable operations on the state objects starting
+        with the previous state. You'll get best results if you use a library like immutablejs or immer to do those updates. */
+    const [studyParticipantCounts, setStudyParticipantCounts] = useState<List<StudyParticipantCount>>(List())
+    const [filteredPids, setFilteredPids] = useState<string[]>(null)
     // Updated every time a filter is changed: 
-    const [totalSelectedCounts, setTotalSelectedCounts] = React.useState<TotalCounts>({ study: 0, participant: 0 })
+    const [totalSelectedCounts, setTotalSelectedCounts] = useState<TotalCounts>({ study: 0, participant: 0 })
+    const [totalAppliedCounts, setTotalAppliedCounts] = useState<TotalCounts>({ study: 0, participant: 0 })
 
     // ----- State set by user ------
     // Groups
-    const [loadedGroup, setLoadedGroup] = React.useState<GroupInfo>()
-    const [unsavedFilters, setUnsavedFilters] = React.useState<boolean>(false)
+    const [loadedGroup, setLoadedGroup] = useState<GroupInfo>()
+    const [unsavedFilters, setUnsavedFilters] = useState<boolean>(false)
     // Filters 
-    const [appliedFilters, setAppliedFilters] = React.useState<SelectedFilters>(sf)
-    const [selectedFilters, setSelectedFiltersState] = React.useState<SelectedFilters>(appliedFilters)
+    const [appliedFilters, setAppliedFilters] = useState<SelectedFilters>(sf)
+    const [selectedFilters, setSelectedFiltersState] = useState<SelectedFilters>(appliedFilters)
     const setSelectedFilters = (filters: SelectedFilters) => {
         setSelectedFiltersState(filters)
             Promise.all([
@@ -70,15 +90,15 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
             })
     }
     // Other view settings set by user
-    const [showSampleType_dropdown, setShowSampleType_dropdown] = React.useState<boolean>(false)
-    const [showSampleType_tab, setShowSampleType_tab] = React.useState<boolean>(false)
+    const [showSampleType_dropdown, setShowSampleType_dropdown] = useState<boolean>(false)
+    const [showSampleType_tab, setShowSampleType_tab] = useState<boolean>(false)
 
     // ----- Other -----
     // Webparts
-    const [participantDataWebpart, setParticipantDataWebpart] = React.useState()
-    const [dataViewsWebpart, setDataViewsWebpart] = React.useState()
+    const [participantDataWebpart, setParticipantDataWebpart] = useState<any>()
+    const [dataViewsWebpart, setDataViewsWebpart] = useState<any>()
     // Banner
-    const [bannerInfo, setBannerInfoState] = React.useState<BannerInfo>(new BannerInfo(JSON.parse(localStorage.getItem("dataFinderBannerInfo"))))
+    const [bannerInfo, setBannerInfoState] = useState<BannerInfo>(new BannerInfo(JSON.parse(localStorage.getItem("dataFinderBannerInfo"))))
     const setBannerInfo = (bi: BannerInfo) => {
         // wrapper which sets state and local storage
         setBannerInfoState(bi)
@@ -92,7 +112,7 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
     // Effects  -------------------------------------
 
     // Setup (only run on first render) ----- 
-    React.useEffect(() => {
+    useEffect(() => {
         // load data
         // CubeHelpers.getFilterCategories(LABKEY).then((categoriesResponse) => {
         //     const categories = CubeHelpers.createFilterCategories(categoriesResponse)
@@ -150,10 +170,11 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
     }, [])
 
     // When filters are applied
-    React.useEffect(() => {
+    useEffect(() => {
         if (studyDict) {
                 ParticipantGroupHelpers.saveParticipantIdGroupInSession(filteredPids).then(() => {
-                    if (participantDataWebpart) participantDataWebpart.render()
+                    // TODO: Optional chaining: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#optional-chaining
+                    participantDataWebpart?.render()
                 })
                 if (studyDict) {
                     ParticipantGroupHelpers.updateContainerFilter(studyParticipantCounts, studyDict)
@@ -164,11 +185,17 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
 
     // Helper functions ---------------------------------------------
 
-    const renderWepart = (tabName: string) => {
+    /* TODO: When your function component is executing (rendering) it re-declares all variables, including functions, every
+        render. When these are passed as props to child components, the child component will receive a new reference to the
+        function with every render which will make a React.memo child component render every time and not get any optimization
+        from the shouldComponentUpdate comparison it does by default. Using the useCallback hook, the function is memoized
+        so a new reference is not created every render unless the state or prop values listed as the second parameter change.
+        https://reactjs.org/docs/hooks-reference.html#usecallback */
+    const renderWepart = useCallback((tabName: string) => {
         if (tabName == "participant") { participantDataWebpart.render(); return }
         if (tabName == "data") { dataViewsWebpart.render(); return }
         return
-    }
+    }, [participantDataWebpart, dataViewsWebpart]);
 
     // ----- Memos -----
     const BannerMemo = React.memo(Banner)
@@ -189,6 +216,7 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
         )
     }
 
+    // TODO: Consider making this a component. Easier testing, profiling and finding components.
     const FilterDropdownHelper = (dim, level, includeIndicators = false, includeAndOr = false) => {
         const levelArray = level.split(".")
         let label = levelArray[0];
@@ -235,29 +263,51 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
     // Callbacks -----------------------------------------------------
     // ------ Filter-related -------
 
-    const filterClick = (dim: string, filter: Filter) => {
+    const filterClick = useCallback((dim: string, filter: Filter) => {
         return (() => {
             const sf = toggleFilter(dim, filter.level, filter.member, selectedFilters)
             setSelectedFilters(sf)
         })
-    }
+    }, [selectedFilters])
 
-    const clickAndOr = (dim: string, level: string) => {
+    const clickAndOr = (dim: string, level: string): (string) => void => {
         return ((value: string) => {
             setSelectedFilters(setAndOr(dim, level, value, selectedFilters))
         })
     }
 
-    const applyFilters = (filters = selectedFilters, customUnsavedFilters = true, groupName = null) => {
+    /* TODO: To take full advantage of TypeScript type checking, you should include return types on functions. Also optional
+        parameters is the safer way to default to undefined for a parameter.*/
+    const applyFilters = (filters = selectedFilters, customUnsavedFilters = true, groupName?: string): void => {
         // set applied filters
+
+        /* TODO: When looking at state updates that cause renders, generally simple state updates not in promises will get
+            batched together to cause a single render. So this update would likely get batched with setUnsavedFilters(unsavedFiltersValue)
+            below. This is part of the work the React framework is doing and why we have to treat state updates as asynchronous */
         setAppliedFilters(filters)
         // set local storage
         localStorage.setItem("dataFinderSelectedFilters", JSON.stringify(filters))
         CubeHelpers.getStudyParticipantCounts(mdx, filters, loadedStudiesArray)
             .then((spcResponse) => {
                 const { countsList, pids } = CubeHelpers.createStudyParticipantCounts(spcResponse)
+                /* TODO: React will not batch together state updates inside promises so these state updates will each result in
+                    a render. This would be a case that you could combine that state into a single object. */
                 setStudyParticipantCounts(countsList)
-                setFilteredPids(pids)
+
+                /* TODO: setState functions can take an object or a function with the parameter being the previous
+                    value of the state object. This is useful if the next state value is dependent on the previous state
+                    value. */
+                /* TODO: Note that the way of comparison we have here is not very optimal as the comparison is fairly costly. The fastest
+                     comparison would be just a reference comparison (prevPids === pids) and really just leaving that to
+                     the default behavior of any React.memos using this state object. However this would require the API
+                     call to do an immutable update on the previous pids array and return a new pids array only if anything has changed.
+                     In this case it looks like the API is returning a new pids array every time, so that won't work. */
+                setFilteredPids((prevPids) => {
+                    if (JSON.stringify(prevPids) !== JSON.stringify(pids)) {
+                        return pids;
+                    }
+                    return prevPids;
+                })
             })
         Promise.all([
             CubeHelpers.getCubeData(mdx, filters, "[Subject].[Subject]", loadedStudiesArray),
@@ -277,9 +327,32 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
             CubeHelpers.getTotalCounts(mdx, selectedFilters, "[Study].[Name]", loadedStudiesArray)
         ]).then((res) => {
             const counts = CubeHelpers.createTotalCounts(res)
-            setTotalAppliedCounts(counts)
-            setTotalSelectedCounts(counts)
-            setBannerInfo(bannerInfo.with({ unsavedFilters: unsavedFiltersValue, counts: counts, groupName: groupName || bannerInfo.groupName }))
+
+            /* TODO: As discussed above these two set states will each cause a render since they are in a promise. Could
+                also be a case for combining state. */
+            setTotalAppliedCounts((prevCounts) => {
+                if(prevCounts.study !== counts.study || prevCounts.participant !== counts.participant)
+                {
+                    return counts;
+                }
+                return prevCounts;
+            });
+            /* TODO: So why can't we do this comparison of current counts with next counts outside the setState function
+                and only call the setState function when there is an update? In most cases that would probably be fine, but
+                you have to remember these are essentially asynchronous functions and prevCounts may change based on other
+                state updates, so using that prevCounts parameter will just lock in the previous state with the next state
+                at the actual time of execution of setState. */
+            setTotalSelectedCounts((prevCounts) => {
+                if(prevCounts.study !== counts.study || prevCounts.participant !== counts.participant)
+                {
+                    return counts;
+                }
+                return prevCounts;
+            })
+
+            /* TODO: Using Nullish Coalescing is safer here as the falsiness is only undefined or null, not "", 0 or false.
+                https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#nullish-coalescing */
+            setBannerInfo(bannerInfo.with({ unsavedFilters: unsavedFiltersValue, counts: counts, groupName: groupName ?? bannerInfo.groupName }))
         })
     }
 
@@ -357,6 +430,13 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
         }
     }
 
+    /* TODO: Declaring JSX objects as props will cause a new prop to be passed in with every render. Instead pass through
+        a function that returns a JSX element so the props are not updated on every render. Memoize with useCallback function. */
+    const getSampleTypeCheckbox = useCallback(() => {
+        return <SampleTypeCheckbox
+        toggleShowSampleType={() => toggleSampleType("tab")}
+        showSampleType={showSampleType_tab} />
+    }, [showSampleType_tab])
 
     // ------ Other ------
     const toggleSampleType = (which) => {
@@ -364,6 +444,7 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
         if(which == "tab") setShowSampleType_tab(!showSampleType_tab)
     }
     // -------------------------------- RETURN --------------------------------
+    console.log("render");
     return (
         <div>
             {/* <div className="df-dropdown-options">
@@ -381,6 +462,7 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
                 counts={totalAppliedCounts}
                 unsavedFilters={bannerInfo.unsavedFilters}
                 links={
+                    // TODO: This is creating a new JSX object every render so will make BannerMemo render with every render here since props are changing every time
                     <div id="participant-group-links">
                         <a id="manage-participant-group-link" className="labkey-text-link" href="/study/Studies/manageParticipantCategories.view?">Manage Groups</a>
                         <a id="send-participant-group-link" className="labkey-text-link" href="#" onClick={() => sendParticipantGroup()}>Send</a>
@@ -389,6 +471,7 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
                     </div>
                 }
                 dropdowns={
+                    // TODO: Consider making this a component.
                     <div id="participant-group-buttons">
                         <LoadDropdown groups={availableGroups} loadParticipantGroup={loadParticipantGroup} />
                         <ClearDropdown clearAll={clearFilters} reset={() => { loadedGroup ? loadParticipantGroup(loadedGroup) : clearFilters() }} />
@@ -400,6 +483,7 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
                 } />
 
             <div className="row" style={{ position: "relative" }}>
+                {/* TODO: Consider making this filterCategories section into one or more components. */}
                 {filterCategories && <>
                     <div className="col-sm-4">
                         {FilterDropdownHelper("Study", "Condition", true)}
@@ -486,11 +570,7 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
                     renderWebpart={renderWepart}
                     filterClick={filterClick}
                     selectedStudies={selectedFilters.getIn(["Study", "Study", "members"]) || List([])}
-                    sampleTypeCheckbox={
-                        <SampleTypeCheckbox
-                            toggleShowSampleType={() => toggleSampleType("tab")}
-                            showSampleType={showSampleType_tab} />
-                    } />
+                    sampleTypeCheckbox={getSampleTypeCheckbox} />
             </div>
 
             {/* Tooltip */}
@@ -500,7 +580,9 @@ const DataFinderController: React.FC<DataFinderControllerProps> = ({mdx, studyIn
         </div>
     )
 
-}
+})
+
+DataFinderController.whyDidYouRender = true;
 
 export const App: React.FC = () => {
     const filterBanner = document.getElementById('filter-banner')
@@ -515,7 +597,7 @@ export const App: React.FC = () => {
         name: 'DataFinderCube'
     })
 
-    React.useEffect(() => {
+    useEffect(() => {
         Promise.all([
             new Promise((resolve, reject) => dfcube.onReady((mdx) => resolve(true))),
             CubeHelpers.getStudyInfo(LABKEY)
