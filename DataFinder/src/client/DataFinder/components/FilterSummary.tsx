@@ -11,11 +11,13 @@ interface FilterIndicatorListProps {
     filterClass: string;
     filters: Map<string, SelectedFilter>;
     title: string;
+    indicateNoFilters?: boolean;
 }
 
 interface AssayFilterIndicatorListProps {
     filters: Map<string, Map<string, SelectedFilter>>;
-    title?: string
+    title?: string;
+    indicateNoFilters?: boolean
 }
 
 interface FilterIndicatorFlagProps {
@@ -36,24 +38,27 @@ export const FilterSummary = (props: FilterSummaryProps) => {
                 <FilterIndicatorList
                     filterClass={"Study"}
                     filters={props.filters.Study}
-                    title={"Study Design"} />
+                    title={"Study Design"}
+                    indicateNoFilters={true} />
             </div>
             <div className="col-sm-4">
                 <FilterIndicatorList
                     filterClass={"Subject"}
                     filters={props.filters.Subject}
-                    title={"Participant Characteristics"} />
+                    title={"Participant Characteristics"}
+                    indicateNoFilters={true}  />
             </div>
             <div className="col-sm-4">
                 <AssayFilterIndicatorList
                     filters={props.filters.Data}
-                    title={"Assay Data"} />
+                    title={"Assay Data"}
+                    indicateNoFilters={true}  />
             </div>
         </div>
     )
 }
 
-export const AssayFilterIndicatorList: React.FC<AssayFilterIndicatorListProps> = ({filters, title}) => {
+export const AssayFilterIndicatorList: React.FC<AssayFilterIndicatorListProps> = ({filters, title, indicateNoFilters}) => {
     let filterFlags;
     if (filters.size == 0 ||
         (filters.getIn(["Assay", "Timepoint"]) == undefined &&
@@ -63,7 +68,12 @@ export const AssayFilterIndicatorList: React.FC<AssayFilterIndicatorListProps> =
             filters.getIn(["SampleType", "Assay"]) == undefined &&
             filters.getIn(["Timepoint", "Timepoint"]) == undefined &&
             filters.getIn(["Timepoint", "SampleType"]) == undefined)) {
-        filterFlags = <em className="filter-indicator no-filters">No filters currently applied</em>
+                if (indicateNoFilters) {
+                    filterFlags = <em className="filter-indicator no-filters">No filters currently applied</em>
+                } else {
+                    filterFlags = <></>
+                }
+        
     } else {
         // These should be in the same order as the filter indicators in the banner
         const filterMap = Map<string, SelectedFilter>({
@@ -137,12 +147,17 @@ export const AssayFilterIndicatorList: React.FC<AssayFilterIndicatorListProps> =
     )
 }
 
-const FilterIndicatorList: React.FC<FilterIndicatorListProps> = ({ filterClass, filters, title }) => {
+export const FilterIndicatorList: React.FC<FilterIndicatorListProps> = ({ filterClass, filters, title, indicateNoFilters }) => {
     // props: filter class, filters, title text
     let filterFlags
     // debugger;
     if (filters.size == 0) {
-        filterFlags = <em className="filter-indicator no-filters">No filters currently applied</em>
+        if (indicateNoFilters) {
+            filterFlags = <em className="filter-indicator no-filters">No filters currently applied</em>
+        } else {
+            filterFlags = <></>
+        }
+        
     } else {
         const filterKeys = filters.keySeq();
         filterFlags = filterKeys.map((key: string) => {

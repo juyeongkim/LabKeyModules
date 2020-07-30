@@ -1,1 +1,30 @@
 @import '../theme/_RstudioViewer.scss';
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: "Titillium Web", Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+}
+
+#rstudio-viewer {
+    font-family: "Roboto", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #494949;
+    padding: 5px;
+    background-color: #f9f9f9;
+}
+
+.description {
+    font-size: 12px;
+}
+
+pre {
+    font-size: 12px;
+    padding: 5px 10px;
+    background-color: white;
+    overflow: scroll;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+}

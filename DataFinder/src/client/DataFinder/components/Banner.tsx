@@ -204,7 +204,7 @@ const BannerTitleBarFC: React.FC<BannerTitleBarProps> = (({
     );
 });
 
-const BannerTitleBar = React.memo(BannerTitleBarFC)
+export const BannerTitleBar = React.memo(BannerTitleBarFC)
 
 const BannerTitleElement = React.memo(({children}) => {
     return(
@@ -245,7 +245,7 @@ const ExploreGroupDropdown = React.memo(({ }) => {
     )
 })
 
-const ParticipantGroupSummary = React.memo<ParticipantGroupSummaryProps>(({
+export const ParticipantGroupSummary = React.memo<ParticipantGroupSummaryProps>(({
     groupSummary,
     counts
 }) => {

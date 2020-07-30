@@ -1,11 +1,14 @@
 import * as React from '../../../../DataFinder/node_modules/react'
-import { Banner } from '../../../../DataFinder/src/client/DataFinder/components/Banner';
+import { ParticipantGroupSummary } from '../../../../DataFinder/src/client/DataFinder/components/Banner';
 
 // Styling imports
 import './RstudioViewer.scss';
+import { SelectedFilters } from '../../../../DataFinder/src/client/typings/CubeData';
+import { FilterSummary, FilterIndicatorList, AssayFilterIndicatorList } from '../../../../DataFinder/src/client/DataFinder/components/FilterSummary';
 
 const RStudioViewer: React.FC = () => {
     const [participantGroup, setParticipantGroup] = React.useState(null)
+    const [refresh, setRefresh] = React.useState(0)
     let sf = null;
     let groupSummary = null;
     let counts = null;
@@ -17,17 +20,18 @@ const RStudioViewer: React.FC = () => {
             success: function (response) {
                 var res = JSON.parse(response.responseText);
                 if (res.success) {
-                    setParticipantGroup(res)
+                    setParticipantGroup(res.data)
                 }
             }
         });
-    }, [])
+    }, [refresh])
 
             if (participantGroup == null) {
                 return <> </>
             }
             if (participantGroup.filters) {
-                const sf = JSON.parse(participantGroup.filters);
+                sf = new SelectedFilters(JSON.parse(participantGroup.filters));
+                console.log(sf)
                 const description = JSON.parse(participantGroup.description)
                 if (description) {
                     groupSummary = description.summary ?? description
@@ -39,14 +43,44 @@ const RStudioViewer: React.FC = () => {
                 }
             }
             return (
-                <div id="data-finder-banner">
-                    <Banner
-                        filters={sf}
-                        counts={counts}
-                        groupSummary={groupSummary}
-                        manageGroupsDropdown={<></>}
-                    />
-                </div>
+                <> 
+                    <button style={{display: "block"}} onClick={() => setRefresh(refresh + 1)}>Refresh</button>
+                    <h2>{"Current group: " + groupSummary.label}</h2>
+                    <em>{counts.participant} participants from {counts.study} studies</em>
+
+                    <hr></hr>
+                    <div style={{display: "inline-block"}}>
+                    <FilterIndicatorList 
+                        filterClass={"Study"}
+                        filters={sf.Study}
+                        title={""}
+                        indicateNoFilters={false} />
+                    <FilterIndicatorList 
+                        filterClass={"Subject"}
+                        filters={sf.Subject}
+                        title={""}
+                        indicateNoFilters={false} />
+                    <AssayFilterIndicatorList
+                        filters={sf.Data}
+                        title={""}
+                        indicateNoFilters={false}  />
+                    </div>
+                    <hr></hr>
+                    
+                    <p className="description">
+                        You may edit these filters or load a different participant group
+                        from the "Find Participants" page in ImmuneSpace. After editing,
+                        click "refresh" for this panel to reflect the changes. 
+                    </p>
+                    <p className="description">
+                        To acces info about selected participants:
+                    </p>
+                    <pre>
+                    {"con <- CreateConnection(\"\")\ndemographics <- con$getDataset(\"demographics\")"}   
+                    </pre>
+                </>
+
+                    
     
             )
         }
