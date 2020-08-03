@@ -12,7 +12,7 @@ for (let i = 0; i < entryPoints.apps.length; i++) {
     entries[entryPoint.name] = entryPoint.path + '/app.tsx';
     plugins.push(new HtmlWebpackPlugin({
         inject: false,
-        filename: '../../extraWebapp/RstudioViewer_new.html',
+        filename: '../../extraWebapp/rstudio-viewer.html',
         template: 'webpack/rstudioviewer.template.html'
     }))
 }
