@@ -39,6 +39,7 @@ DataFinder/resources/views
 DataFinder/resources/web
 AboutPage/resources/views
 AboutPage/resources/web
+extraWebApp/web
 
 # Npm and React libraries
 */node_modules/

@@ -10,7 +10,7 @@ export interface FilterSummaryProps {
 interface FilterIndicatorListProps {
     filterClass: string;
     filters: Map<string, SelectedFilter>;
-    title: string;
+    title?: string;
     indicateNoFilters?: boolean;
 }
 
@@ -166,7 +166,7 @@ export const FilterIndicatorList: React.FC<FilterIndicatorListProps> = ({ filter
     }
     return (
         <div>
-            <h4>{title}</h4>
+            {title && <h4>{title}</h4>}
             {filterFlags}
         </div>
     )

@@ -1,5 +1,5 @@
-import * as React from '../../../../DataFinder/node_modules/react'
-import * as ReactDOM from '../../../../DataFinder/node_modules/react-dom'
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
 
 import { App } from './RstudioViewer'
 

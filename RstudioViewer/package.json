@@ -28,20 +28,17 @@
     }
   },
   "dependencies": {
+    "datafinder": "../DataFinder",
     "@labkey/api": "0.2.3",
-    "d3": "^5.12.0",
     "file-saver": "^2.0.2",
-    "immutable": "^3.8.2",
-    "react": "16.8.6",
-    "react-bootstrap": "0.32.4",
-    "react-dom": "16.8.6"
+    "react": "../DataFinder/node_modules/react",
+    "react-dom": "../DataFinder/node_modules/react-dom"
   },
   "devDependencies": {
     "@babel/core": "7.4.5",
     "@babel/polyfill": "7.4.4",
     "@babel/preset-env": "7.4.5",
     "@babel/preset-react": "7.0.0",
-    "@types/d3": "^5.7.2",
     "@types/enzyme": "3.10.3",
     "@types/jest": "^24.9.1",
     "@types/react": "16.8.19",
@@ -65,8 +62,8 @@
     "mini-css-extract-plugin": "0.7.0",
     "node-sass": "4.12.0",
     "postcss-loader": "3.0.0",
-    "react-hot-loader": "4.8.8",
-    "react-test-renderer": "16.8.6",
+    "react-hot-loader": "../DataFinder/node_modules/react-hot-loader",
+    "react-test-renderer": "../DataFinder/node_modules/react-test-renderer",
     "resolve-url-loader": "3.1.0",
     "sass-loader": "7.1.0",
     "style-loader": "1.0.0",
