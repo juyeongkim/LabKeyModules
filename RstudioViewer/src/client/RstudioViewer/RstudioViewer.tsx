@@ -1,7 +1,6 @@
-import * as React from 'datafinder/node_modules/react'
-import { Query} from 'datafinder/node_modules/@labkey/api';
-import { SelectedFilters } from '../../../../DataFinder/src/client/typings/CubeData';
-import { FilterIndicatorList, AssayFilterIndicatorList } from '../../../../DataFinder/src/client/DataFinder/components/FilterSummary';
+import * as React from 'react'
+import { Query} from '@labkey/api';
+import { Greeter } from "immunespace-react-tools"
 
 // Styling imports
 import './RstudioViewer.scss';
@@ -42,7 +41,8 @@ const RStudioViewer: React.FC = () => {
             let groupSummary = null;
             let counts = null
             if (res.data?.filters) {
-                const sf = new SelectedFilters(JSON.parse(res.data.filters));
+                // const sf = new SelectedFilters(JSON.parse(res.data.filters));
+                const sf = null;
                 const description = JSON.parse(res.data.description)
                 if (description) {
                     groupSummary = description.summary ?? description
@@ -63,22 +63,23 @@ const RStudioViewer: React.FC = () => {
                     success: (data) => {
                         counts.participant = data.rows[0].participant_count;
                         counts.study = data.rows[0].study_count;
-                        resolve({sf: new SelectedFilters(), groupSummary: {label: ""}, counts: counts})
+                        // resolve({sf: new SelectedFilters(), groupSummary: {label: ""}, counts: counts})
+                        resolve({sf: null, groupSummary: {label: ""}, counts: counts})
                      }
                 })
             }
         })
-        ).then((res) => {
+        ).then((res: any) => {
             setData(res)
         })
     }, [refresh])
-
-            if (data.sf == null) {
-                return <> </>
-            }
+            // if (data.sf == null) {
+            //     return <> </>
+            // }
            
             return (
                 <> 
+                    <Greeter name="helen"></Greeter>
                     <button style={{display: "block"}} onClick={() => setRefresh(refresh + 1)}>Refresh</button>
                     {data.sf && <> 
                         <h2>{"Current group: " + data.groupSummary.label}</h2>
@@ -89,7 +90,7 @@ const RStudioViewer: React.FC = () => {
                     <hr></hr>
                     <div style={{display: "inline-block"}}>
                         {noFilters && <em className="filter-indicator no-filters">No filters currently applied</em>}
-                        {!noFilters && <>
+                        {/* {!noFilters && <>
                             <FilterIndicatorList 
                                 filterClass={"Study"}
                                 filters={data.sf.Study}
@@ -102,7 +103,7 @@ const RStudioViewer: React.FC = () => {
                                 filters={data.sf.Data}
                                 indicateNoFilters={false}  />
                         </>
-                        }
+                        } */}
                     </div>
                     <hr></hr>
                     

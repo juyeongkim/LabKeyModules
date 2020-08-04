@@ -1,0 +1,51 @@
+{
+  "name": "immunespace-react-tools",
+  "version": "0.0.3",
+  "description": "Tools for developing modules for ImmuneSpace using react and typescript",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "test": "jest --config  jestconfig.json",
+    "build": "tsc; cp src/components/*.scss lib/components",
+    "prepare": "npm run build",
+    "format": "prettier --write \"src/**/*.ts*\" ",
+    "lint": "tslint -p tsconfig.json",
+    "storybook": "start-storybook",
+    "scss": "node-sass --output-style compressed -o lib src/components/*.scss"
+  },
+  "license": "GPL-2",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "5.9.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.19",
+    "@fortawesome/free-regular-svg-icons": "5.11.2",
+    "@fortawesome/free-solid-svg-icons": "5.9.0",
+    "@fortawesome/react-fontawesome": "0.1.4",
+    "@labkey/api": "1.0.1",
+    "@types/react": "^16.9.44",
+    "node-sass": "^4.14.1",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
+    "save-dev": "0.0.1-security"
+  },
+  "devDependencies": {
+    "@storybook/addon-knobs": "^5.3.19",
+    "@storybook/react": "^5.3.19",
+    "@types/jest": "^25.1.4",
+    "babel-loader": "8.0.6",
+    "jest": "^25.2.4",
+    "prettier": "^2.0.2",
+    "sass-loader": "^9.0.2",
+    "ts-jest": "^25.3.0",
+    "ts-loader": "6.2.2",
+    "tslint": "^6.1.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.8.3"
+  },
+  "peerDependencies": {
+    "react": "^16.0",
+    "react-dom": "^16.0"
+  }
+}
