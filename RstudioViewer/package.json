@@ -31,9 +31,9 @@
     "@labkey/api": "0.2.3",
     "datafinder": "../DataFinder",
     "file-saver": "^2.0.2",
+    "immunespace-react-tools": "file:../ImmuneSpaceReactTools",
     "react": "../DataFinder/node_modules/react",
-    "react-dom": "../DataFinder/node_modules/react-dom",
-    "immunespace-react-tools": "file:../ImmuneSpaceReactTools"
+    "react-dom": "../DataFinder/node_modules/react-dom"
   },
   "devDependencies": {
     "@babel/core": "7.4.5",

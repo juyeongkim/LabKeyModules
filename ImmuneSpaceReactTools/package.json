@@ -1,6 +1,6 @@
 {
   "name": "immunespace-react-tools",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Tools for developing modules for ImmuneSpace using react and typescript",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -10,7 +10,6 @@
   "scripts": {
     "test": "jest --config  jestconfig.json",
     "build": "tsc; cp src/components/*.scss lib/components",
-    "prepare": "npm run build",
     "format": "prettier --write \"src/**/*.ts*\" ",
     "lint": "tslint -p tsconfig.json",
     "storybook": "start-storybook",
@@ -25,6 +24,7 @@
     "@fortawesome/react-fontawesome": "0.1.4",
     "@labkey/api": "1.0.1",
     "@types/react": "^16.9.44",
+    "immutable": "3.8.2",
     "node-sass": "^4.14.1",
     "react": "16.8.6",
     "react-dom": "16.8.6",
@@ -45,6 +45,7 @@
     "typescript": "^3.8.3"
   },
   "peerDependencies": {
+    "immutable": "^3.8.2",
     "react": "^16.0",
     "react-dom": "^16.0"
   }

@@ -1,6 +1,8 @@
 import * as d3 from 'd3'
-import { HeatmapDatum, Filter } from '../../../typings/CubeData';
+import { HeatmapDatum } from '../../../typings/CubeData';
 import { AssayTimepointViewerProps } from '../AssayTimepointViewer';
+import { Filter } from 'immunespace-react-tools'
+
 // ================================================================== //
 /* 
 This is a heatmap component which was translated from an r2d3 fuction.

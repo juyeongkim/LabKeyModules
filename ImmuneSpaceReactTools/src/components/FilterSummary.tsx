@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { SelectedFilters, SelectedFilter } from "immunespace-react-tools";
+import { SelectedFilters, SelectedFilter } from "../types/Filters";
 import { Map } from 'immutable'
 import './FilterSummary.scss'
 

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { drawAssayTimepointViewer } from "./d3/AssayTimepointViewer.d3"
-import { HeatmapDatum, Filter, IAssayData, PlotDatum, FilterCategory, } from '../../typings/CubeData';
+import { HeatmapDatum,  IAssayData, PlotDatum,  } from '../../typings/CubeData';
+import { Filter, FilterCategory } from "immunespace-react-tools"
 
 import "./AssayTimepointViewer.scss"
 import { map } from 'd3';

@@ -1,7 +1,8 @@
 import React, { CSSProperties } from 'react';
 import { D3Barplot } from './d3/Barplot.d3'
-import { PlotDatum, FilterCategory } from '../../typings/CubeData'
+import { PlotDatum,  } from '../../typings/CubeData'
 import { List } from 'immutable'
+import { FilterCategory } from "immunespace-react-tools"
 import "./Barplot.scss"
 
 export interface BarplotProps {

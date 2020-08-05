@@ -1,8 +1,8 @@
 import "./FilterSelector.scss"
 import * as React from 'react';
-import { Filter, FilterCategory, SelectedFilter, FilterCategories, AssayData, SelectedFilters } from '../../typings/CubeData'
+import {  AssayData } from '../../typings/CubeData'
 import { List} from 'immutable'
-import { FilterDeletor } from './FilterSummary'
+import { FilterDeletor, Filter, FilterCategory, SelectedFilter, FilterCategories, SelectedFilters } from 'immunespace-react-tools'
 import { DataFilters } from './DataFilters';
 import { CubeMdx } from '../../typings/Cube';
 

@@ -1,11 +1,12 @@
 // Functions for manipulating the selected participant group, and interfacing with 
 // the sessionParticipantGroup api
 
-import { SelectedFilters, GroupInfo, SelectedFilter, TotalCounts } from "../../typings/CubeData";
+import {  GroupInfo,} from "../../typings/CubeData";
 import ParticipantGroupAPI, { ParticipantGroup } from '../../typings/ParticipantGroup'
 import { List } from "immutable";
 import { StudyParticipantCount, StudyDict } from "../../typings/StudyCard";
 import { GroupSummary } from "../components/Banner";
+import { SelectedFilters, SelectedFilter, TotalCounts } from 'immunespace-react-tools'
 
 const participantGroupAPI: ParticipantGroupAPI = LABKEY.Study.ParticipantGroup
 

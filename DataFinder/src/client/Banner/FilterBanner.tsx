@@ -1,7 +1,6 @@
 import React from 'react'
-import { SelectedFilters, TotalCounts } from '../typings/CubeData';
+import { SelectedFilters, TotalCounts, DropdownButtons } from 'immunespace-react-tools';
 import { Banner, GroupSummary } from '../DataFinder/components/Banner';
-import { DropdownButtons } from '../DataFinder/components/reusable/Dropdowns';
 import { getSessionParticipantGroup } from '../DataFinder/helpers/ParticipantGroup'
 import './Banner.scss'
 

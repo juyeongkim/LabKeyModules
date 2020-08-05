@@ -1,5 +1,6 @@
 import React, { ReactChild, ReactElement } from 'react';
-import { PlotData, FilterCategories, Filter, SelectedFilters, SelectedFilter} from '../../typings/CubeData';
+import { PlotData } from "../../typings/CubeData"
+import { FilterCategories, Filter, SelectedFilters, SelectedFilter} from 'immunespace-react-tools';
 import { StudyParticipantCount, StudyDict } from '../../typings/StudyCard';
 import { List } from 'immutable'
 

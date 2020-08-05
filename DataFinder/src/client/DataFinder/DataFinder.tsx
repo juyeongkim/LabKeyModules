@@ -1,6 +1,6 @@
 import "./DataFinder.scss";
 import React from 'react';
-import { CubeData, Filter, SelectedFilters, GroupInfo, TotalCounts } from '../typings/CubeData';
+import { CubeData, GroupInfo} from '../typings/CubeData';
 import * as CubeHelpers from './helpers/CubeHelpers';
 import * as ParticipantGroupHelpers from './helpers/ParticipantGroup';
 import { toggleFilter, setAndOr } from './helpers/SelectedFilters';
@@ -8,11 +8,8 @@ import { DataFinderFilters } from './components/FilterSelector'
 import  { Tabs } from "./components/Tabs";
 import { Banner, GroupSummary, ManageGroupsDropdown } from "./components/Banner";
 import { CubeMdx } from "../typings/Cube";
-import { HighlightedButton, RowOfButtons } from "./components/reusable/Buttons";
-import { OuterDropdownButton } from './components/reusable/Dropdowns'
 import { SelectedParticipants, SelectedStudies } from "./components/TabContent";
-import { Loader } from "./components/reusable/Loader";
-import { sum, map } from "d3";
+import { Filter, SelectedFilters, TotalCounts, Loader, OuterDropdownButton, HighlightedButton, RowOfButtons} from "immunespace-react-tools"
 
 interface DataFinderControllerProps {
     mdx:  CubeMdx,

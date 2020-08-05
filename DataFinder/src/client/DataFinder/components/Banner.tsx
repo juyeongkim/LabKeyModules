@@ -1,13 +1,9 @@
 import React, { useCallback, useMemo, Children } from "react";
-import { FilterSummary } from "./FilterSummary";
-import { SelectedFilters, TotalCounts, GroupInfo } from "../../typings/CubeData";
-import { HighlightedButton } from "./reusable/Buttons";
-import { DropdownButtons, InnerDropdownButtons, } from "./reusable/Dropdowns"
+import { GroupInfo } from "../../typings/CubeData";
+import { DropdownButtons, InnerDropdownButtons,  RowOfButtons, HighlightedButton, SelectedFilters, FilterSummary, TotalCounts } from "immunespace-react-tools"
 import * as ParticipantGroupHelpers from "../helpers/ParticipantGroup"
 import { Record } from "immutable";
-import { RowOfButtons } from "./reusable/Buttons";
 import "./Banner.scss"
-import { ParticipantGroup } from "../../typings/ParticipantGroup";
 
 interface BannerProps {
     groupSummary: GroupSummary;

@@ -6,14 +6,15 @@
 
 import { CubeMdx } from "../../typings/Cube";
 import { Query} from '@labkey/api';
-import { SelectedFilters, PlotData, IPlotData, Filter, PlotDatum } from "../../typings/CubeData";
+import {  PlotData, IPlotData, PlotDatum } from "../../typings/CubeData";
 import * as Cube from '../../typings/Cube'
-import { HeatmapDatum, FilterCategories } from '../../typings/CubeData'
+import { HeatmapDatum, } from '../../typings/CubeData'
 import { createCubeFilters } from './SelectedFilters'
 import * as StudyCardTypes from '../../typings/StudyCard'
 import { StudyParticipantCount } from '../../typings/StudyCard'
 import * as Immutable from 'immutable'
 import { createTinyHeatmapConsts, createTinyHeatmapYaxisScale } from "../components/TinyHeatmap";
+import {SelectedFilters, Filter, FilterCategories } from "immunespace-react-tools"
 
 
 // ----- Promises ----- 

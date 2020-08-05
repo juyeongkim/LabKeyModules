@@ -6,8 +6,7 @@
 // returning the new "selectedFilters." It is passed down into the various
 // filter selector buttons as well as the heatmap. 
 
-import { Filter, SelectedFilters, ISelectedFilters, SelectedFilter } from '../../typings/CubeData'
-import { List, Set, Map, fromJS } from 'immutable';
+import { Filter, SelectedFilters, ISelectedFilters, SelectedFilter } from 'immunespace-react-tools'
 // toggle filter
 
 interface CubeFilter {
