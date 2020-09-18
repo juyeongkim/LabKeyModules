@@ -167,6 +167,7 @@ export const createLoadedStudies = (studyInfoRes: SelectRowsResponse) => {
     //     const idb = parseInt(b.slice(12, b.length-1))
     //     return(ida - idb)
     // })
+
     // Remove two null studies (Project, and template)
     loadedStudiesArray.pop()
     loadedStudiesArray.pop()
@@ -174,10 +175,6 @@ export const createLoadedStudies = (studyInfoRes: SelectRowsResponse) => {
 }
 export const createTotalCounts = ([subjectResponse, studyResponse]) => {
     return ({ study: studyResponse.cells[0][0].value || 0, participant: subjectResponse.cells[0][0].value || 0 })
-}
-
-export const createParticipantIds = (participantIdsCs: Cube.CellSet) => {
-    return (participantIdsCs.axes[1].positions.map(position => position[0].name))
 }
 
 export const createStudyDict = ([studyInfoCs, studyCountCs]: [SelectRowsResponse, Cube.CellSet]) => {
@@ -237,22 +234,22 @@ export const createStudyDict = ([studyInfoCs, studyCountCs]: [SelectRowsResponse
 }
 
 
-export const createFilterCategories_old = (categoriesResponse: SelectRowsResponse) => {
-    let categories: FilterCategories = {};
+// export const createFilterCategories_old = (categoriesResponse: SelectRowsResponse) => {
+//     let categories: FilterCategories = {};
 
-    categoriesResponse.rows.forEach((row) => {
+//     categoriesResponse.rows.forEach((row) => {
 
-        if (categories[row.variable] === undefined) categories[row.variable] = []
-        categories[row.variable].push({ label: row.category, sortorder: row.sortorder })
-    })
-    Object.keys(categories).forEach((key) => {
-        categories[key].sort((a, b) => {
-            if (a.sortorder == b.sortorder) { if (a.label.toLowerCase() > b.label.toLowerCase()) return (1); else return (-1) }
-            return a.sortorder - b.sortorder
-        })
-    })
-    return (categories)
-}
+//         if (categories[row.variable] === undefined) categories[row.variable] = []
+//         categories[row.variable].push({ label: row.category, sortorder: row.sortorder })
+//     })
+//     Object.keys(categories).forEach((key) => {
+//         categories[key].sort((a, b) => {
+//             if (a.sortorder == b.sortorder) { if (a.label.toLowerCase() > b.label.toLowerCase()) return (1); else return (-1) }
+//             return a.sortorder - b.sortorder
+//         })
+//     })
+//     return (categories)
+// }
 
 export const createFilterCategories = (categoriesCs: Cube.CellSet) => {
     let categories: FilterCategories = {};

@@ -17,36 +17,35 @@ describe('Manipulate Selected Filters', () => {
         })
         const newFilters6 = new SelectedFilters({ Study: { Study: new SelectedFilter({ members: List(["SDY269"]), operator:  "OR"})}})
 
-        debugger;
-        expect(sf.toggleFilter("Data", "Timepoint.Timepoint", "1", oldFilters)).toEqual(newFilters1)
-        expect(sf.toggleFilter("Data", "Timepoint.Timepoint", "2", newFilters1)).toEqual(newFilters2)
-        expect(sf.toggleFilter("Data", "Timepoint.Timepoint", "1", newFilters1)).toEqual(oldFilters)
+        expect(JSON.stringify(sf.toggleFilter("Data", "Timepoint.Timepoint", "1", oldFilters))).toEqual(JSON.stringify(newFilters1))
+        expect(JSON.stringify(sf.toggleFilter("Data", "Timepoint.Timepoint", "2", newFilters1))).toEqual(JSON.stringify(newFilters2))
+        expect(JSON.stringify(sf.toggleFilter("Data", "Timepoint.Timepoint", "1", newFilters1))).toEqual(JSON.stringify(oldFilters))
 
-        expect(sf.toggleFilter("Data", "Assay.Timepoint", "HAI.0", oldFilters)).toEqual(newFilters3)
+        expect(JSON.stringify(sf.toggleFilter("Data", "Assay.Timepoint", "HAI.0", oldFilters))).toEqual(JSON.stringify(newFilters3))
 
-        expect(sf.toggleFilter("Subject", "Age", "0-10", oldFilters)).toEqual(newFilters4)
-        expect(sf.toggleFilter("Subject", "Age", "0-10", newFilters1)).toEqual(newFilters5)
-        expect(sf.toggleFilter("Subject", "Age", "0-10", newFilters5)).toEqual(newFilters1)
+        expect(JSON.stringify(sf.toggleFilter("Subject", "Age", "0-10", oldFilters))).toEqual(JSON.stringify(newFilters4))
+        expect(JSON.stringify(sf.toggleFilter("Subject", "Age", "0-10", newFilters1))).toEqual(JSON.stringify(newFilters5))
+        expect(JSON.stringify(sf.toggleFilter("Subject", "Age", "0-10", newFilters5))).toEqual(JSON.stringify(newFilters1))
 
-        expect(sf.toggleFilter("Study", "Study", "SDY269", oldFilters)).toEqual(newFilters6)
-        expect(sf.toggleFilter("Study", "Study", "SDY269", newFilters6)).toEqual(oldFilters)
+        expect(JSON.stringify(sf.toggleFilter("Study", "Study", "SDY269", oldFilters))).toEqual(JSON.stringify(newFilters6))
+        expect(JSON.stringify(sf.toggleFilter("Study", "Study", "SDY269", newFilters6))).toEqual(JSON.stringify(oldFilters))
 
     })
 
     test("ToggleAndOr", () => {
         const filtersAnd = new SelectedFilters({ Data: { Timepoint: { Timepoint: new SelectedFilter({ members: List(["1", "2"]), operator: "AND" }) } } })
         const filtersOr = new SelectedFilters({ Data: { Timepoint: { Timepoint: new SelectedFilter({ members: List(["1", "2"]), operator: "OR" }) } } })
-        expect(sf.toggleAndOr("Data", "Timepoint.Timepoint", filtersAnd)).toEqual(filtersOr)
-        expect(sf.toggleAndOr("Data", "Timepoint.Timepoint", filtersOr)).toEqual(filtersAnd)
+        expect(JSON.stringify(sf.toggleAndOr("Data", "Timepoint.Timepoint", filtersAnd))).toEqual(JSON.stringify(filtersOr))
+        expect(JSON.stringify(sf.toggleAndOr("Data", "Timepoint.Timepoint", filtersOr))).toEqual(JSON.stringify(filtersAnd))
 
     })
 
     test("SetAndOr", () => {
         const filtersAnd = new SelectedFilters({ Data: { Timepoint: { Timepoint: new SelectedFilter({ members: List(["1", "2"]), operator: "AND" }) } } })
         const filtersOr = new SelectedFilters({ Data: { Timepoint: { Timepoint: new SelectedFilter({ members: List(["1", "2"]), operator: "OR" }) } } })
-        expect(sf.setAndOr("Data", "Timepoint.Timepoint", "AND", filtersAnd)).toEqual(filtersAnd)
-        expect(sf.setAndOr("Data", "Timepoint.Timepoint", "OR", filtersAnd)).toEqual(filtersOr)
-        expect(sf.setAndOr("Data", "Timepoint.Timepoint", "AND", filtersOr)).toEqual(filtersAnd)
+        expect(JSON.stringify(sf.setAndOr("Data", "Timepoint.Timepoint", "AND", filtersAnd))).toEqual(JSON.stringify(filtersAnd))
+        expect(JSON.stringify(sf.setAndOr("Data", "Timepoint.Timepoint", "OR", filtersAnd))).toEqual(JSON.stringify(filtersOr))
+        expect(JSON.stringify(sf.setAndOr("Data", "Timepoint.Timepoint", "AND", filtersOr))).toEqual(JSON.stringify(filtersAnd))
 
     })
 

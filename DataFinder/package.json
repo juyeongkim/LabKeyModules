@@ -95,6 +95,7 @@
       "\\.(scss)$": "<rootDir>/test/styleMock.ts"
     },
     "testRegex": "(\\.(test|spec))\\.(ts|tsx)$",
+    "testPathIgnorePatterns": ["/reusable/"],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     }
