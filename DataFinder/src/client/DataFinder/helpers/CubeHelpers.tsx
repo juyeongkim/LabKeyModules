@@ -325,7 +325,7 @@ export const createSelectedParticipants = (studyParticipantCountCs: Cube.CellSet
     return ({ studyParticipantCounts: studyParticipantCounts, pids: pids })
 }
 
-const cs2cd = (participantCounts: Cube.CellSet, studyCounts: Cube.CellSet) => {
+export const cs2cd = (participantCounts: Cube.CellSet, studyCounts: Cube.CellSet) => {
 
     const results: { dim: string, levelArray: string[], data: PlotDatum }[] = participantCounts.cells.map((cell, cellIndex) => {
         const hierarchy = cell[0].positions[1][0].level.uniqueName.replace(/\[|\]/g, "") // remove "[" and "]"

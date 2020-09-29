@@ -8,8 +8,8 @@ import tc_SubjectCs from '../../tests/data/cubeResponse_getTotalCounts_Subject.j
 import studyInfo from '../../tests/data/selectRowsResponse_dataFinder_studyCard.json'
 import studyCountCs from '../../tests/data/cubeResponse_getStudyCounts.json'
 import studyParticipantCountsCs from '../../tests/data/cubeResponse_getStudyParticipantCounts.json'
-import cubeDataCs_study from '../../tests/data/cubeResponse_getCubeData_Study.json'
-import cubeDataCs_subject from '../../tests/data/cubeResponse_getCubeData_Subject.json'
+import plotDataCs_study from '../../tests/data/cubeResponse_getPlotData_study.json'
+import plotDataCs_subject from '../../tests/data/cubeResponse_getPlotData_subject.json'
 import {initMocks, resetMocks} from "../../tests/mock";
 
 // this uses cycle.js https://github.com/douglascrockford/JSON-js/blob/master/cycle.js
@@ -18,8 +18,8 @@ retrocycle(tc_StudyCs)
 retrocycle(tc_SubjectCs)
 const sc_studyCountCs: CellSet = retrocycle(studyCountCs)
 const spc_cs: CellSet = retrocycle(studyParticipantCountsCs)
-const cs_study: CellSet = retrocycle(cubeDataCs_study)
-const cs_subject: CellSet = retrocycle(cubeDataCs_subject)
+const cs_study: CellSet = retrocycle(plotDataCs_study)
+const cs_subject: CellSet = retrocycle(plotDataCs_subject)
 
 
 
@@ -45,7 +45,7 @@ describe("Create Data", () => {
             const loadedStudies = CubeHelpers.createLoadedStudies(studyInfoRes)
             expect(Array.isArray(loadedStudies)).toBeTruthy()
             expect(loadedStudies.length).toEqual(studyInfoRes.rows.length - 2)
-            expect(loadedStudies[0]).toMatch("\[Study\]\.\[SDY\d\+]")
+            expect(/SDY\d+/.test(loadedStudies[0])).toBeTruthy()
         })
     })
     test("createTotalCounts", () => {
@@ -63,13 +63,6 @@ describe("Create Data", () => {
         expect(studyDict).toHaveProperty(["SDY269", "heatmapInfo","assays"])
         expect(studyDict).toHaveProperty(["SDY269", "heatmapInfo", "data", 0, "participantCount"])
     })
-    // test("createFilterCategories", () => {
-    //     const categories = CubeHelpers.createFilterCategories(cs_subject)
-    //     expect(categories).toHaveProperty("Age")
-    //     expect(categories).toHaveProperty("ExposureMaterial")
-    //     expect(Array.isArray(categories.Age)).toBeTruthy()
-    //     expect(categories).toHaveProperty(["Age", 0, "label"], "0-10")
-    // })
     test("createSelectedParticipants", () => {
         const res = CubeHelpers.createSelectedParticipants(spc_cs)
         expect(Object.keys(res)).toEqual(["studyParticipantCounts", "pids"])
@@ -82,21 +75,40 @@ describe("Create Data", () => {
         expect(Object.keys(spc.get(0).toJS())).toEqual(["studyName", "participantCount"])
 
     })
-    // test("createPlotData", () => {
-    //     debugger;
-    //     const pd = CubeHelpers.createPlotData(cs_subject, cs_study)
-    //     expect(pd).toBeInstanceOf(PlotData)
-    //     expect(pd.map((k, i) => i)).toEqual(["Study", "Subject", "Data"])
-    // })
+    test("createFilterCategories", () => {
 
-    // test("createStudyParticipantCounts", () => {
-    //     const studyParticipantCounts = CubeHelpers.createStudyParticipantCounts(studyParticipantCountsCs)
-    //     expect(studyParticipantCounts).toHaveProperty("studyParticipantCounts")
-    //     expect(studyParticipantCounts).toHaveProperty("pids")
-    //     expect(Array.isArray(studyParticipantCounts.pids)).toBeTruthy()
-    //     expect(typeof(studyParticipantCounts.pids[0])).toBe("string")
-    //     expect(studyParticipantCounts.pids[0]).toContain("SUB")
-    //     expect(studyParticipantCounts.studyParticipantCounts).toBeInstanceOf(List)
-    //     expect(studyParticipantCounts.studyParticipantCounts.get(0)).toBeInstanceOf(StudyParticipantCount)
-    // })
+    })
+    test("createPlotData", () => {
+        debugger;
+        const pd = CubeHelpers.cs2cd(cs_subject, cs_study)
+        expect(Object.keys(pd).sort()).toEqual(["Data", "Study", "Subject"])
+        expect(pd).toHaveProperty("Study.Name")
+        expect(pd).toHaveProperty("Study.Condition")
+        expect(pd).toHaveProperty("Study.ResearchFocus")
+        expect(pd).toHaveProperty("Subject.Age")
+        expect(pd).toHaveProperty("Subject.Race")
+        expect(pd).toHaveProperty("Subject.Gender")
+        expect(pd).toHaveProperty("Data.Assay")
+        expect(pd).toHaveProperty("Data.Timepoint")
+        expect(pd).toHaveProperty("Data.SampleType")
+
+        expect(pd).toHaveProperty("Data.Assay.Assay")
+        expect(pd).toHaveProperty("Data.Assay.Timepoint")
+        expect(pd).toHaveProperty("Data.Assay.SampleType")
+        expect(pd).toHaveProperty("Data.SampleType.Assay")
+        expect(pd).toHaveProperty("Data.SampleType.SampleType")
+        expect(pd).toHaveProperty("Data.Timepoint.Timepoint")
+        expect(pd).toHaveProperty("Data.Timepoint.SampleType")
+
+        expect(Object.keys(pd.Study.Condition[0]).sort()).toEqual(["level", "member", "participantCount", "studyCount"])
+        
+    })
+
+    test("createFilterCategories", () => {
+        const categories = CubeHelpers.createFilterCategories(cs_subject)
+        expect(categories).toHaveProperty("Age")
+        expect(categories).toHaveProperty("ExposureMaterial")
+        expect(Array.isArray(categories.Age)).toBeTruthy()
+        expect(categories).toHaveProperty(["Age", 0, "label"], "0-10")
+    })
 })
