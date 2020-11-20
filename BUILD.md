@@ -1,37 +1,51 @@
-### How to use ANT build
-...
 ### How to use the gradle build
 
-To use the gradle build you need to have a working LabKey dev machine.  Read this
+* Overview:
+LabKeyModules contains all the external modules needed for the ImmuneSpace application to utilize on top of a base LabKey Server installation.  Since the Staging and Production servers use a binary installation of the LabKey Server software, LabKeyModules uses a separate gradle build system so that it can be easily installed on either a local development machine, which requires building from source, or the servers.  The build system utilizes environmental variables that dictate where to find needed resources (e.g. JAVA, Apache Tomcat, and Gradle) as well as where to deploy the final module files in order to provide this flexibility.
 
->https://www.labkey.org/Documentation/wiki-page.view?name=devMachine
+Instructions for setup on a local development machine:
 
-Once that's working, and only then.  Do the following:
+* First setup your dev machine and basic labkey server according to the instructions in the DevOps documents in Notion.so
 
-* Checkout RGLab/LabKeyModules into the {labkey}/server/modules directory e.g.
+* Clone down LabKeyModules
+cd ~
+git clone https://github.com/RGLab/LabKeyModules.git
+cd LabKeyModules
+git checkout dev
 
->~/labkey/server/modules$ git clone https://github.com/RGLab/LabKeyModules LabKeyModules
+* Install Gradle
 
-* Add this line to settings.gradle near the similar looking lines
+wget https://services.gradle.org/distributions/gradle-6.5-bin.zip -P /tmp
+sudo unzip -d /opt/gradle /tmp/gradle-6.5.zip
 
->    BuildUtils.includeModules(this.settings, rootDir, [BuildUtils.SERVER_MODULES_DIR + "/LabKeyModules"], [])
+* Create an ~/LabKeyModules/.envrc file with the following vars:
 
-* Now rebuild, and you should see the modules in {labkey}/build/modules/
+export JAVA_HOME=/home/<user>/release19.3/jdk-13.0.1
+export CATALINA_HOME=/home/<user>/release19.3/tomcat
+export JAVA_OPTS=-Ddevmode=true
 
-> ~/labkey$ ./gradlew cleanBuild
+export GRADLE_DEPLOY_DIR=/home/<user>/release19.3/build/deploy
+export GRADLE_LKMODS_DIR=/home/<user>/LabKeyModules
+export GRADLE_EXTERNAL_MODULES_DIR=/home/<user>/release19.3/build/deploy/externalModules
 
-* Next deploy and they will be in {labkey}/build/deploy/modules
+export GRADLE_HOME=/opt/gradle/gradle-6.2.2
+export PATH=${GRADLE_HOME}/bin:${PATH}
 
-> ~/labkey$ ./gradlew --parallel deployApp
+* Source the .envrc file
 
-* To build a module that you can use in production add the option -PdeployMode=prod.
+* Deploy all LabKeyModules to the $GRADLE_EXTERNAL_MODULES_DIR
+~/LabKeyModules$ gradle deploy
 
-> ~/labkey$ ./gradlew --parallel -PdeployMode=prod deployApp
+* Alternatively, deploy a single module (e.g. DataFinder)
+~/LabKeyModules$ gradle :DataFinder:deploy
 
-* or for one module
 
-> ~/labkey$ ./gradlew --parallel -PdeployMode=prod :server:modules:LabKeyModules:ISCore:deployModule
- 
+Notes:
+- At the project level
+    - module.template.xml: used to generate the necessary meta-data file needed by LabKey server to utilize the module after it has been decompressed from the zip format.
+    - settings.gradle: file defines the modules to be built.  Don't forget to add new modules there.
+    - build.gradle: Checks for necessary plugins and defines locations for final zip files to be placed
+
 
 
 

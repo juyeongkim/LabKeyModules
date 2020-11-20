@@ -1,37 +1,32 @@
 LabKeyModules
 =============
 
-LabKey Modules for ImmuneSpace
+Contained in this repo are LabKey External Modules that can be used within the ImmuneSpace Portal, mainly as webparts.  To learn more about an individual module, you can look at the <module>/module.properties "description" to see the purpose.
 
-### study_pubinfo
-Add PubMed statistics and citations information
+To add a new React-based module, it easiest to copy over a current react-module and then slim down to the following structure:
 
-### ImmuneResponsePredictor
-**Title:** Immune Response Predictor
+- ModuleName
+    - src / client
+        - app.tsx (Production mode renders react component "App" to the app div from app.template.html)
+        - dev.tsx (Development mode renders react component "App" to the app div from app.template.html)
+        - moduleName.tsx (Script defining the React Highest Order Component "App") **
+    - Webpack (Static Module Bundler)
+        - app.template.html (highest level html file holding "app" div that react targets)
+        - app.view.template.xml (LabKey xml file describing js and css dependencies) **
+        - app.webpart.template.xml (LabKey xml file allowing for use as webpart)
+        - constants.js (defines Style and TypeScript loaders)
+        - dev.config.js (Development mode configuration file)
+        - entryPoints.js (LabKey-specific configuration file) **
+        - prod.config.js (Production mode configuration file)
+    - .nprmc (npm configuration file)
+    - build.gradle (Gradle's build file for the specific module) **
+    - module.properties (meta-data file used by Gradle for building zip file to hand off to LabKey Server) **
+    - package.json (npm meta-data file used for managing dependencies, scripts, version, etc) **
+    - postcss.config.js (Post CSS Processing Configuration File)
+    - tsconfig.json (TypeScript Configuration file)
 
-**Summary:** This module can be used to automatically select a group of genes whose expression at a given time point (e.g. gene expression levels at day 0) best predicts a given immunological response at a later time point (e.g. HAI at day 28).
-It uses penalized linear or logistic multivariate regression as implemented in the [glmnet](http://cran.r-project.org/web/packages/glmnet/index.html) R package. The gene selection part is done by cross validation. More details can be found by exploring the manual or the source code.
+Files marked with ** are those that will need to be updated for the new module.
 
-### GeneExpressionExplorer
-**Title:** Gene Expression Explorer
+At the project level, you will need to add the module to the settings.gradle file in order for it to be built using <LabKeyModules>$ gradle deploy. 
 
-**Summary:** This module can be used to quickly plot the expression level of one or more genes against a selected immunological response variable (e.g. HAI) in one or more cohorts. Visualization is achieved using the [ggplot2](http://cran.r-project.org/web/packages/ggplot2/index.html) R package. Demographics variables such as gender and age can be added to the plot using aesthetic variables such as color, shape etc. More details can be found by exploring the manual or the source code.
-
-### DifferentialGeneExpressionAnalysis
-**Title:** Differential Gene Expression Analysis
-
-**Summary:** This module can be used to test for differential gene expression across time (or across a pre-specified contrast) within a specified cohort. It uses the [Limma](http://www.bioconductor.org/packages/release/bioc/html/limma.html) R package for performing differential expression analysis. More details can be found by exploring the manual or the source code. 
-
-### GeneSetEnrichmentAnalysis
-**Title:** Gene Set Enrichment Analysis
-
-**Summary:** This module can be used to perform a gene set enrichment analysis across time (or across a prespecified contrast) within a specified cohort. It uses the CAMERA method of the [Limma](http://www.bioconductor.org/packages/release/bioc/html/limma.html) R package for performing gene set enrichment analysis. More details can be found by exploring the manual or the source code.
-
-### HIPCMatrix
-Create expression matrix using an R pipeline job and import assay into LabKey's microarray ExpressionMatrix assay
-
-### SDY144, SDY180, SDY207, SDY269
-Queries and reports to be transfered to ImmuneSpace
-
-Tested with [BrowserStack](https://www.browserstack.com)
-
+Older ext.js modules do not need to built in the same manner as the react-based modules and will have a different structure that is prescribed by LabKey in their documentation: https://www.labkey.org/Documentation/wiki-page.view?name=simpleModules. 
