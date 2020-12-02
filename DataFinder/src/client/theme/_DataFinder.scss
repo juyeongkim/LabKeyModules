@@ -30,13 +30,13 @@
   display: block;
   padding: 2px 0px 0px 0px;
   font-size: 1.2em;
-  border-bottom: 1px solid #d0d0d0
+  border-bottom: 1px solid #d0d0d0;
+}
+
+.nav-tabs > li.active > a {
+  background-color: #ffffff;
 }
 
 .btn-group {
   vertical-align: baseline;
 }
-
-
-
-
