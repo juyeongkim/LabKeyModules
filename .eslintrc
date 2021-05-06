@@ -1,0 +1,24 @@
+{
+    "extends": "@labkey/eslint-config-react",
+    "rules": {
+        "prettier/prettier": [
+            "error",
+            {
+                "usePrettierrc": true
+            }
+        ],
+        "jsx-quotes": ["error", "prefer-double"],
+        "quotes": ["error", "double"]
+    },
+    "ignorePatterns": [
+        "*.*",
+        "!*.js",
+        "!*.jsx",
+        "!*.ts",
+        "!*.tsx",
+        "entryPoints.js",
+        "webpack",
+        "node_modules",
+        "theme"
+    ]
+}
